@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class WizzardController : MonoBehaviour
 {
@@ -6,8 +7,6 @@ public class WizzardController : MonoBehaviour
     public bool facingRight = true;
     public float moveForce = 30f;
     public float maxSpeed = 1f;
-    public float jumpForce = 1f;
-    public Transform groundCheck;
     public GameObject FireballBallistic;
     public GameObject FireballStraight;
     public GameObject FireballTime;
@@ -29,8 +28,7 @@ public class WizzardController : MonoBehaviour
     {
         inputEnabled = false;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (inputEnabled)
@@ -40,22 +38,21 @@ public class WizzardController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
-            fireball.transform.position = this.transform.position;
         }
         else if (Input.GetKeyDown(KeyCode.G))
         {
             fireball = (GameObject)Instantiate<GameObject>(FireballStraight);
-            fireball.transform.position = this.transform.position;
         }
         else if (Input.GetKeyDown(KeyCode.H))
         {
             fireball = (GameObject)Instantiate<GameObject>(FireballTime);
-            fireball.transform.position = this.transform.position;
+            
         }
 
         if (fireball != null)
         {
-            
+            int directionNum = facingRight ? 1 : -1;
+            fireball.transform.position = this.transform.position + new Vector3(directionNum * 0.4f, 0.4f, 0f);
             if (facingRight)
             {
                 var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
@@ -76,8 +73,7 @@ public class WizzardController : MonoBehaviour
         if (inputEnabled)
         {
             float h = Input.GetAxis("Horizontal");
-
-            //anim.SetFloat("Speed", Mathf.Abs(h));
+            
             if (h == 0.0) rb2d.velocity = new Vector2();
             if (h * rb2d.velocity.x < maxSpeed)
                 rb2d.AddForce(Vector2.right * h * moveForce);
@@ -93,7 +89,7 @@ public class WizzardController : MonoBehaviour
     }
 
 
-    void Flip()
+    private void Flip()
     {
         facingRight = !facingRight;
         Vector3 theScale = transform.localScale;
