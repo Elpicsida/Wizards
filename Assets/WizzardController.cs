@@ -10,7 +10,9 @@ public class WizzardController : MonoBehaviour
     public GameObject FireballBallistic;
     public GameObject FireballStraight;
     public GameObject FireballTime;
-    private bool inputEnabled;
+    [HideInInspector] public bool InputEnabled;
+    [HideInInspector] public int Angle;
+    private int FireStrength = 500;
 
     private Rigidbody2D rb2d;
 
@@ -21,70 +23,99 @@ public class WizzardController : MonoBehaviour
 
     void Activate()
     {
-        inputEnabled = true;
+        InputEnabled = true;
     }
 
     void Deactivate()
     {
-        inputEnabled = false;
+        InputEnabled = false;
     }
     
     void Update()
     {
-        if (inputEnabled)
+        if (InputEnabled)
         {
-
-        GameObject fireball = null;
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
-        }
-        else if (Input.GetKeyDown(KeyCode.G))
-        {
-            fireball = (GameObject)Instantiate<GameObject>(FireballStraight);
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            fireball = (GameObject)Instantiate<GameObject>(FireballTime);
-            
-        }
-
-        if (fireball != null)
-        {
-            int directionNum = facingRight ? 1 : -1;
-            fireball.transform.position = this.transform.position + new Vector3(directionNum * 0.4f, 0.4f, 0f);
-            if (facingRight)
+            GameObject fireball = null;
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
-                rigidBodyFireball.AddForce(new Vector2(300f, 300f));
+                fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
             }
-            else
+            else if (Input.GetKeyDown(KeyCode.G))
             {
-                var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
-                rigidBodyFireball.AddForce(new Vector2(-300f, 300f));
+                fireball = (GameObject)Instantiate<GameObject>(FireballStraight);
             }
-        }
+            else if (Input.GetKeyDown(KeyCode.H))
+            {
+                fireball = (GameObject)Instantiate<GameObject>(FireballTime);
+            }
 
+            if (fireball != null)
+            {
+                var x = FireStrength * Mathf.Cos(Angle * Mathf.Deg2Rad);
+                var y = FireStrength * Mathf.Sin(Angle * Mathf.Deg2Rad);
+                int directionNum = facingRight ? 1 : -1;
+                fireball.transform.position = this.transform.position + new Vector3(directionNum * 0.4f, 0.4f, 0f);
+                var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
+                rigidBodyFireball.AddForce(new Vector2(x, y));
+            }
         }
     }
 
     void FixedUpdate()
     {
-        if (inputEnabled)
+        if (InputEnabled)
         {
-            float h = Input.GetAxis("Horizontal");
-            
-            if (h == 0.0) rb2d.velocity = new Vector2();
-            if (h * rb2d.velocity.x < maxSpeed)
-                rb2d.AddForce(Vector2.right * h * moveForce);
+            HandleCrosshair();
+            HandleMovement();
+        }
+    }
 
-            if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
-                rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+    private void HandleMovement()
+    {
+        float h = Input.GetAxis("Horizontal");
 
-            if (h > 0 && !facingRight)
-                Flip();
-            else if (h < 0 && facingRight)
-                Flip();
+        if (h == 0.0) rb2d.velocity = new Vector2();
+        if (h * rb2d.velocity.x < maxSpeed)
+            rb2d.AddForce(Vector2.right * h * moveForce);
+
+        if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
+            rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+
+        if (h > 0 && !facingRight)
+            Flip();
+        else if (h < 0 && facingRight)
+            Flip();
+    }
+    
+    private void HandleCrosshair()
+    {
+        float upDown = Input.GetAxis("Vertical");
+
+        if (upDown != 0)
+        {
+            if (upDown > 0)
+            {
+                if (facingRight)
+                {
+                    if (Angle >= 270 || Angle < 90) Angle++;
+                }
+                else
+                {
+                    if (Angle <= 270 && Angle > 90) Angle--;
+                }
+            }
+            else if (upDown < 0)
+            {
+                if (facingRight)
+                {
+                    if (Angle > 270 || Angle <= 90) Angle--;
+                }
+                else
+                {
+                    if (Angle < 270 && Angle >= 90) Angle++; ;
+                }
+            }
+            Angle = (Angle + 360) % 360;
         }
     }
 
@@ -95,5 +126,11 @@ public class WizzardController : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+        FlipAngle();
+    }
+
+    private void FlipAngle()
+    {
+        Angle = (540 - Angle) % 360; 
     }
 }
