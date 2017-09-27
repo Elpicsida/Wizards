@@ -19,8 +19,6 @@ public class TurnManager : MonoBehaviour {
             Wizzards[1].gameObject.SendMessage("Deactivate");
             Camera.main.transform.parent = Wizzards[0].transform;
             Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
-
-            
         }
 
         if (Input.GetKey(KeyCode.N))
