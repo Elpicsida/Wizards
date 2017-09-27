@@ -6,17 +6,15 @@ public class Crosshair : MonoBehaviour {
     
     private GameObject parent;
     private WizzardController wizardController;
-    private int radiusFromCenter = 2;
     private SpriteRenderer spriteRenderer;
+    private int radiusFromCenter = 2;
 
-    // Use this for initialization
     void Start () {
         parent = transform.parent.gameObject;
         wizardController = parent.GetComponent<WizzardController>();
         spriteRenderer = GetComponent<SpriteRenderer>(); 
     }
 	
-	// Update is called once per frame
 	void Update () {
         if (wizardController.InputEnabled)
         {
