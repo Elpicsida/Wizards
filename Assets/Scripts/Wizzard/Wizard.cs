@@ -1,30 +1,52 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Wizard : MonoBehaviour {
+public class Wizard : MonoBehaviour
+{
+    public void Init(WizardTemplate wizardTemplate)
+    {
+        this.wizardName = wizardTemplate.WizardName;
+        this.face = wizardTemplate.Face;
+        this.healthPoints = wizardTemplate.HealthPoints;
+        this.manaPoints = wizardTemplate.ManaPoints;
+        this.condition = wizardTemplate.Condition;
+        this.vitality = wizardTemplate.Vitality;
+        this.intelligence = wizardTemplate.Intelligence;
+        this.resistance = wizardTemplate.Resistance;
+        this.vision = wizardTemplate.Vision;
+        this.mainElement = wizardTemplate.MainElement;
+    }
 
-    [SerializeField]
-    private int HealthPoints;
+    private string wizardName;
+    public string WizardName { get { return wizardName; } }
 
-    [SerializeField]
-    private int ManaPoints;
+    private Sprite face;
+    public Sprite Face { get { return face; } }
 
-    [SerializeField]
-    private int Condition;
+    private int healthPoints;
+    public int HealthPoints { get { return healthPoints; } }
 
-    [SerializeField]
-    private int Vitality;
+    private int manaPoints;
+    public int ManaPoints { get { return manaPoints; } }
 
-    [SerializeField]
-    private int Intelligence;
+    private int condition;
+    public int Condition { get { return condition; } }
 
-    [SerializeField]
-    private int Resistance;
+    private int vitality;
+    public int Vitality { get { return vitality; } }
 
-    [SerializeField]
-    private int Vision;
+    private int intelligence;
+    public int Intelligence { get { return intelligence; } }
 
-    [SerializeField]
-    private ElementEnum MainElement;
+    private int resistance;
+    public int Resistance { get { return resistance; } }
+
+    private int vision;
+    public int Vision { get { return vision; } }
+
+    private ElementEnum mainElement;
+    public ElementEnum MainElement { get { return mainElement; } }
+
 }
