@@ -1,24 +1,26 @@
-﻿using System;
+﻿using Assets.Scripts.Spells;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WizzardController : MonoBehaviour
 {
-    [HideInInspector]
-    public bool facingRight = true;
-    public float moveForce = 30f;
-    public float maxSpeed = 1f;
-    public GameObject FireballBallistic;
-    public GameObject FireballStraight;
-    public GameObject FireballTime;
+    [HideInInspector] public bool facingRight = true;
     [HideInInspector] public bool InputEnabled;
     [HideInInspector] public int Angle;
-    private int FireStrength = 500;
+    public float moveForce = 30f;
+    public float maxSpeed = 1f;
+    public int FireStrength = 500;
 
+    public List<SpellNames> Spells;
+    private int currentSpell;
     private Rigidbody2D rb2d;
+    private Wizard wizardStats;
 
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        wizardStats = GetComponent<Wizard>();
     }
 
     void Activate()
@@ -35,28 +37,16 @@ public class WizzardController : MonoBehaviour
     {
         if (InputEnabled)
         {
-            GameObject fireball = null;
             if (Input.GetKeyDown(KeyCode.F))
             {
-                fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
-            }
-            else if (Input.GetKeyDown(KeyCode.G))
-            {
-                fireball = (GameObject)Instantiate<GameObject>(FireballStraight);
-            }
-            else if (Input.GetKeyDown(KeyCode.H))
-            {
-                fireball = (GameObject)Instantiate<GameObject>(FireballTime);
-            }
+                GameObject fireball = SpellFactory.GetSpell(Spells[currentSpell]);
 
-            if (fireball != null)
-            {
-                var x = FireStrength * Mathf.Cos(Angle * Mathf.Deg2Rad);
-                var y = FireStrength * Mathf.Sin(Angle * Mathf.Deg2Rad);
-                int directionNum = facingRight ? 1 : -1;
-                fireball.transform.position = this.transform.position + new Vector3(directionNum * 0.4f, 0.4f, 0f);
-                var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
-                rigidBodyFireball.AddForce(new Vector2(x, y));
+                if (fireball != null)
+                {
+                    Spell spell = fireball.GetComponent<Spell>();
+                    spell.Activate();
+                    Spells.Remove(Spells[currentSpell]);
+                }
             }
         }
     }
@@ -75,11 +65,21 @@ public class WizzardController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
 
         if (h == 0.0) rb2d.velocity = new Vector2();
-        if (h * rb2d.velocity.x < maxSpeed)
-            rb2d.AddForce(Vector2.right * h * moveForce);
+        if (wizardStats.Condition > 0)
+        {
 
-        if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
-            rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+            if (h * rb2d.velocity.x < maxSpeed)
+            {
+                rb2d.AddForce(Vector2.right * h * moveForce);
+            }
+            if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
+            {
+                wizardStats.Condition -= 1;
+                rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+                Debug.Log("Condition " + wizardStats.Condition);
+            }
+                
+        }
 
         if (h > 0 && !facingRight)
             Flip();

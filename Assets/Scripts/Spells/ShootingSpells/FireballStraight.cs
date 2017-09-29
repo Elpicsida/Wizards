@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Spells;
 using UnityEngine;
 
-public class FireballStraight : MonoBehaviour {
+public class FireballStraight : ShootingSpell {
 
     public GameObject FireballBallistic;
     
@@ -15,7 +14,7 @@ public class FireballStraight : MonoBehaviour {
             {
                 var fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
                 fireball.transform.position = this.transform.position;
-                fireball.GetComponent<Rigidbody2D>().velocity = -(velocity + new Vector2(1,1) * i);
+                fireball.GetComponent<Rigidbody2D>().velocity = -(velocity + new Vector2(1, 1) * i);
             }
             Destroy(this.gameObject);
         }
