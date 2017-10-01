@@ -6,18 +6,42 @@ public class TurnManager : MonoBehaviour {
 
     public GameObject[] Wizzards;
     private int activeWizardId = 0;
-    
-    void Start () {
+
+    [SerializeField]
+    WizardTemplate leftWizardTemplate;
+    [SerializeField]
+    Wizard leftWizard;
+    [SerializeField]
+    WizardTemplate rightWizardTemplate;
+    [SerializeField]
+    Wizard rightWizard;
+    [SerializeField]
+    BattleGUIBuilder battleGUI;
+
+    void Awake()
+    {
+        leftWizard.Init(leftWizardTemplate);
+        rightWizard.Init(rightWizardTemplate);
+    }
+
+    void Start()
+    {
         Wizzards[0].SendMessage("Activate");
         Camera.main.transform.parent = Wizzards[0].transform;
+        battleGUI.BuildAllWizardGUI(rightWizard);
     }
-	
+
+    public GameObject GetActiveWizard()
+    {
+        return Wizzards[activeWizardId];
+    }
+
     void Update()
     {
         if (Input.GetKey(KeyCode.M))
         {
-            Wizzards[0].gameObject.SendMessage("Activate");
-            Wizzards[1].gameObject.SendMessage("Deactivate");
+            Wizzards[0].SendMessage("Activate");
+            Wizzards[1].SendMessage("Deactivate");
             Camera.main.transform.parent = Wizzards[0].transform;
             Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
             activeWizardId = 0;
@@ -31,10 +55,5 @@ public class TurnManager : MonoBehaviour {
             Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
             activeWizardId = 1;
         }
-    }
-
-    public GameObject GetActiveWizard()
-    {
-        return Wizzards[activeWizardId];
     }
 }

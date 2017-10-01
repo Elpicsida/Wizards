@@ -17,6 +17,7 @@ public class Wizard : MonoBehaviour
         resistance = wizardTemplate.Resistance;
         vision = wizardTemplate.Vision;
         mainElement = wizardTemplate.MainElement;
+        Spells = wizardTemplate.Spells;
     }
 
     public void TakeDamage(int damage)
@@ -70,6 +71,8 @@ public class Wizard : MonoBehaviour
 
     private int vision;
     public int Vision { get { return vision; } }
+
+    public List<SpellNames> Spells;
 
     private ElementEnum mainElement;
     public ElementEnum MainElement { get { return mainElement; } }

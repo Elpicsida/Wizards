@@ -11,8 +11,7 @@ public class WizzardController : MonoBehaviour
     public float moveForce = 30f;
     public float maxSpeed = 1f;
     public int FireStrength = 500;
-
-    public List<SpellNames> Spells;
+    
     private int currentSpell;
     private Rigidbody2D rb2d;
     private Wizard wizardStats;
@@ -39,13 +38,20 @@ public class WizzardController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                GameObject fireball = SpellFactory.GetSpell(Spells[currentSpell]);
-
-                if (fireball != null)
+                if (wizardStats.Spells.Count > 0)
                 {
-                    Spell spell = fireball.GetComponent<Spell>();
-                    spell.Activate();
-                    Spells.Remove(Spells[currentSpell]);
+                    GameObject fireball = SpellFactory.GetSpell(wizardStats.Spells[currentSpell]);
+
+                    if (fireball != null)
+                    {
+                        Spell spell = fireball.GetComponent<Spell>();
+                        spell.Activate();
+                        wizardStats.Spells.Remove(wizardStats.Spells[currentSpell]);
+                    }
+                }
+                else
+                {
+                    Debug.Log("The wizzard doesn't have any spells left");
                 }
             }
         }
