@@ -7,16 +7,31 @@ public class Wizard : MonoBehaviour
 {
     public void Init(WizardTemplate wizardTemplate)
     {
-        this.wizardName = wizardTemplate.WizardName;
-        this.face = wizardTemplate.Face;
-        this.healthPoints = wizardTemplate.HealthPoints;
-        this.manaPoints = wizardTemplate.ManaPoints;
-        this.condition = wizardTemplate.Condition;
-        this.vitality = wizardTemplate.Vitality;
-        this.intelligence = wizardTemplate.Intelligence;
-        this.resistance = wizardTemplate.Resistance;
-        this.vision = wizardTemplate.Vision;
-        this.mainElement = wizardTemplate.MainElement;
+        wizardName = wizardTemplate.WizardName;
+        face = wizardTemplate.Face;
+        healthPoints = wizardTemplate.HealthPoints;
+        manaPoints = wizardTemplate.ManaPoints;
+        condition = wizardTemplate.Condition;
+        vitality = wizardTemplate.Vitality;
+        intelligence = wizardTemplate.Intelligence;
+        resistance = wizardTemplate.Resistance;
+        vision = wizardTemplate.Vision;
+        mainElement = wizardTemplate.MainElement;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        int realDamage = damage - Resistance;
+        if (realDamage > 0)
+        {
+            Debug.Log("Damage taken : " + realDamage);
+            healthPoints -= realDamage;
+        }
+
+        if (HealthPoints < 0)
+        {
+            Debug.Log("Wizzard died");
+        }
     }
 
     private string wizardName;
@@ -32,7 +47,17 @@ public class Wizard : MonoBehaviour
     public int ManaPoints { get { return manaPoints; } }
 
     private int condition;
-    public int Condition { get { return condition; } }
+    public int Condition
+    {
+        get
+        {
+            return condition;
+        }
+        set
+        {
+            condition = value;
+        }
+    }
 
     private int vitality;
     public int Vitality { get { return vitality; } }
