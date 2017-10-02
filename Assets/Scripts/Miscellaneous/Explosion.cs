@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion {
-
-    private GameObject[] Wizzards;
+public class Explosion
+{
+    private GameObject[] Wizards;
 
     public Explosion() {
-        Wizzards = GameObject.FindGameObjectsWithTag("Character");
+        Wizards = GameObject.FindGameObjectsWithTag("Character");
     }
 
     public void Explode(int damage, int radius, Vector3 position)
     {
-        foreach (GameObject wizard in Wizzards)
+        foreach (GameObject wizard in Wizards)
         {
             float distance = Vector3.Distance(wizard.transform.position, position);
             int damageTaken = Mathf.RoundToInt(damage * (1 - distance / radius));

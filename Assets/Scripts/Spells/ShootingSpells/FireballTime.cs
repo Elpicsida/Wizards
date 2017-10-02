@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Spells;
 
-public class FireballTime : ShootingSpell {
-    
+public class FireballTime : ShootingSpell
+{
 	public override void Activate ()
     {
         base.Activate();

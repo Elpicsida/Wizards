@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FireballBallistic : ShootingSpell {
-
+public class FireballBallistic : ShootingSpell
+{
     public int Damage = 50;
     public int Radius = 5;
     private Explosion explosion;
@@ -16,7 +16,8 @@ public class FireballBallistic : ShootingSpell {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Terrain")
+        string collisionobject = collision.gameObject.tag;
+        if ("Terrain".Equals(collisionobject) || "Character".Equals(collisionobject))
         {
             explosion.Explode(Damage, Radius, transform.position);
             Destroy(this.gameObject);

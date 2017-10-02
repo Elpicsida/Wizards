@@ -1,12 +1,10 @@
 ﻿using Assets.Scripts.Spells;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class WizzardController : MonoBehaviour
+public class WizardController : MonoBehaviour
 {
     [HideInInspector] public bool facingRight = true;
-    [HideInInspector] public bool InputEnabled;
+    [HideInInspector] public bool IsActive { get; set; }
     [HideInInspector] public int Angle;
     public float moveForce = 30f;
     public float maxSpeed = 1f;
@@ -14,44 +12,43 @@ public class WizzardController : MonoBehaviour
     
     private int currentSpell;
     private Rigidbody2D rb2d;
-    private Wizard wizardStats;
+    public Wizard wizard;
 
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        wizardStats = GetComponent<Wizard>();
     }
 
     void Activate()
     {
-        InputEnabled = true;
+        IsActive = true;
     }
 
     void Deactivate()
     {
-        InputEnabled = false;
+        IsActive = false;
     }
     
     void Update()
     {
-        if (InputEnabled)
+        if (IsActive)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (wizardStats.Spells.Count > 0)
+                if (wizard.Spells.Count > 0)
                 {
-                    GameObject fireball = SpellFactory.GetSpell(wizardStats.Spells[currentSpell]);
+                    GameObject fireball = SpellFactory.GetSpell(wizard.Spells[currentSpell]);
 
                     if (fireball != null)
                     {
                         Spell spell = fireball.GetComponent<Spell>();
                         spell.Activate();
-                        wizardStats.Spells.Remove(wizardStats.Spells[currentSpell]);
+                        wizard.Spells.Remove(wizard.Spells[currentSpell]);
                     }
                 }
                 else
                 {
-                    Debug.Log("The wizzard doesn't have any spells left");
+                    Debug.Log("The wizard doesn't have any spells left");
                 }
             }
         }
@@ -59,7 +56,7 @@ public class WizzardController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (InputEnabled)
+        if (IsActive)
         {
             HandleCrosshair();
             HandleMovement();
@@ -71,7 +68,7 @@ public class WizzardController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
 
         if (h == 0.0) rb2d.velocity = new Vector2();
-        if (wizardStats.Condition > 0)
+        if (wizard.Condition > 0)
         {
 
             if (h * rb2d.velocity.x < maxSpeed)
@@ -80,9 +77,9 @@ public class WizzardController : MonoBehaviour
             }
             if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
             {
-                wizardStats.Condition -= 1;
+                wizard.Condition -= 1;
                 rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
-                Debug.Log("Condition " + wizardStats.Condition);
+                Debug.Log("Condition " + wizard.Condition);
             }
                 
         }

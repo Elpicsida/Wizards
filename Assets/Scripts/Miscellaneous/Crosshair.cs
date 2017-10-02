@@ -4,23 +4,16 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour {
     
-    private GameObject parent;
-    private WizzardController wizardController;
-    private SpriteRenderer spriteRenderer;
+    public WizardController wizardController;
+    public SpriteRenderer spriteRenderer;
     private int radiusFromCenter = 2;
-
-    void Start () {
-        parent = transform.parent.gameObject;
-        wizardController = parent.GetComponent<WizzardController>();
-        spriteRenderer = GetComponent<SpriteRenderer>(); 
-    }
-	
+    
 	void Update () {
-        if (wizardController.InputEnabled)
+        if (wizardController.IsActive)
         {
             spriteRenderer.enabled = true;
-            var x = radiusFromCenter * Mathf.Cos(wizardController.Angle * Mathf.Deg2Rad) + parent.transform.position.x;
-            var y = radiusFromCenter * Mathf.Sin(wizardController.Angle * Mathf.Deg2Rad) + parent.transform.position.y;
+            var x = radiusFromCenter * Mathf.Cos(wizardController.Angle * Mathf.Deg2Rad) + wizardController.transform.position.x;
+            var y = radiusFromCenter * Mathf.Sin(wizardController.Angle * Mathf.Deg2Rad) + wizardController.transform.position.y;
             transform.position = new Vector2(x, y);
         }
         else
