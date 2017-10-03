@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-
-    public Transform[] Wizzards;
-
     [SerializeField]
     WizardTemplate leftWizardTemplate;
     [SerializeField]
+    WizardController leftWizardController;
+    [SerializeField]
     Wizard leftWizard;
+
     [SerializeField]
     WizardTemplate rightWizardTemplate;
     [SerializeField]
     Wizard rightWizard;
+    [SerializeField]
+    WizardController rightWizardControler;
+
     [SerializeField]
     BattleGUIBuilder battleGUI;
 
@@ -22,31 +25,34 @@ public class TurnManager : MonoBehaviour
     {
         leftWizard.Init(leftWizardTemplate);
         rightWizard.Init(rightWizardTemplate);
-
     }
 
     void Start()
     {
-        Wizzards[0].gameObject.SendMessage("Activate");
-        Camera.main.transform.parent = Wizzards[0].transform;
-        battleGUI.BuildAllWizardGUI(rightWizard);
+        leftWizardController.IsActive = true;
+        battleGUI.BuildAllWizardGUI(leftWizard);
+    }
+
+    public WizardController GetActiveWizard()
+    {
+        return leftWizardController.IsActive ? leftWizardController : rightWizardControler;
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.M))
         {
-            Wizzards[0].gameObject.SendMessage("Activate");
-            Wizzards[1].gameObject.SendMessage("Deactivate");
-            Camera.main.transform.parent = Wizzards[0].transform;
+            leftWizardController.IsActive = true;
+            rightWizardControler.IsActive = false;
+            Camera.main.transform.parent = leftWizardController.transform;
             Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
         }
 
         if (Input.GetKey(KeyCode.N))
         {
-            Wizzards[1].gameObject.SendMessage("Activate");
-            Wizzards[0].gameObject.SendMessage("Deactivate");
-            Camera.main.transform.parent = Wizzards[1].transform;
+            rightWizardControler.IsActive = true;
+            leftWizardController.IsActive = false;
+            Camera.main.transform.parent = rightWizardControler.transform;
             Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
         }
     }
