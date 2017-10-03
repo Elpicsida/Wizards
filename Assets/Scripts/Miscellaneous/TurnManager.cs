@@ -36,6 +36,7 @@ public class TurnManager : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.M))
         {
+            battleGUI.Test(rightWizard);
             Wizzards[0].gameObject.SendMessage("Activate");
             Wizzards[1].gameObject.SendMessage("Deactivate");
             Camera.main.transform.parent = Wizzards[0].transform;
