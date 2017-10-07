@@ -8,9 +8,11 @@ namespace Assets.Scripts.Spells
 {
     public abstract class ShootingSpell : Spell
     {
+        protected TurnManager turnManager;
+
         public override void Activate()
         {
-            TurnManager turnManager = GameObject.FindObjectOfType<TurnManager>();
+            turnManager = GameObject.FindObjectOfType<TurnManager>();
             WizardController wizardController = turnManager.GetActiveWizard();
             int fireStrength = wizardController.FireStrength;
             int angle = wizardController.Angle;

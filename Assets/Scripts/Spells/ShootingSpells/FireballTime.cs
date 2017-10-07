@@ -10,6 +10,8 @@ public class FireballTime : ShootingSpell
 
     void Destroy()
     {
+        turnManager.ChangeTurn();
+        CameraSingleton.Instance.WatchObject(turnManager.GetActiveWizard().gameObject);
         Destroy(this.gameObject);
     }
 }

@@ -1,26 +1,32 @@
-﻿using Assets.Scripts.Spells;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Miscellaneous;
+using Assets.Scripts.Spells;
 using UnityEngine;
-using System;
 
 public class FireballBallistic : ShootingSpell
 {
     public int Damage = 50;
     public int Radius = 5;
     private Explosion explosion;
+    private bool IsDestroyed = false;
     
-	void Start () {
+	void Start ()
+    {
         explosion = new Explosion();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        string collisionobject = collision.gameObject.tag;
-        if ("Terrain".Equals(collisionobject) || "Character".Equals(collisionobject))
+        if (!IsDestroyed)
         {
-            explosion.Explode(Damage, Radius, transform.position);
-            Destroy(this.gameObject);
+            string collisinObject = collision.gameObject.tag;
+            if (TagNames.Terrain.Equals(collisinObject) || TagNames.Character.Equals(collisinObject))
+            {
+                explosion.Explode(Damage, Radius, transform.position);
+                turnManager.ChangeTurn();
+                CameraSingleton.Instance.WatchObject(turnManager.GetActiveWizard().gameObject);
+                Destroy(this.gameObject);
+                IsDestroyed = true;
+            }
         }
     }
 }
