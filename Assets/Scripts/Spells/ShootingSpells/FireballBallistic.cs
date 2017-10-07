@@ -18,8 +18,8 @@ public class FireballBallistic : ShootingSpell
     {
         if (!IsDestroyed)
         {
-            string collisinObject = collision.gameObject.tag;
-            if (TagNames.Terrain.Equals(collisinObject) || TagNames.Character.Equals(collisinObject))
+            string collisionObject = collision.gameObject.tag;
+            if (TagNames.Terrain.Equals(collisionObject) || TagNames.Character.Equals(collisionObject))
             {
                 explosion.Explode(Damage, Radius, transform.position);
                 turnManager.ChangeTurn();

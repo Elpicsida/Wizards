@@ -8,8 +8,8 @@ public class FireballStraight : ShootingSpell
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        string collisinObject = collision.gameObject.tag;
-        if (TagNames.Terrain.Equals(collisinObject) || TagNames.Character.Equals(collisinObject))
+        string collisionObject = collision.gameObject.tag;
+        if (TagNames.Terrain.Equals(collisionObject) || TagNames.Character.Equals(collisionObject))
         {
             var velocity = this.GetComponent<Rigidbody2D>().velocity;
             for (int i = 0; i < 10; i++)
