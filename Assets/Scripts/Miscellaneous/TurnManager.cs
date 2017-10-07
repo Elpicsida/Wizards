@@ -60,7 +60,6 @@ public class TurnManager : MonoBehaviour
             leftWizardController.IsActive = true;
             rightWizardControler.IsActive = false;
             CameraSingleton.Instance.WatchObject(leftWizardController.gameObject);
-            //Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
         }
 
         if (Input.GetKey(KeyCode.N))
@@ -68,7 +67,6 @@ public class TurnManager : MonoBehaviour
             rightWizardControler.IsActive = true;
             leftWizardController.IsActive = false;
             CameraSingleton.Instance.WatchObject(rightWizardControler.gameObject);
-            //Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
         }
     }
 }
