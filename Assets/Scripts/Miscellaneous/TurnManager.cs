@@ -31,11 +31,26 @@ public class TurnManager : MonoBehaviour
     {
         leftWizardController.IsActive = true;
         battleGUI.BuildAllWizardGUI(leftWizard);
+        CameraSingleton.Instance.WatchObject(leftWizardController.gameObject);
     }
 
     public WizardController GetActiveWizard()
     {
         return leftWizardController.IsActive ? leftWizardController : rightWizardControler;
+    }
+
+    public void ChangeTurn()
+    {
+        if (leftWizardController.IsActive)
+        {
+            leftWizardController.IsActive = false;
+            rightWizardControler.IsActive = true;
+        }
+        else
+        {
+            leftWizardController.IsActive = true;
+            rightWizardControler.IsActive = false;
+        }
     }
 
     void Update()
@@ -44,16 +59,14 @@ public class TurnManager : MonoBehaviour
         {
             leftWizardController.IsActive = true;
             rightWizardControler.IsActive = false;
-            Camera.main.transform.parent = leftWizardController.transform;
-            Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
+            CameraSingleton.Instance.WatchObject(leftWizardController.gameObject);
         }
 
         if (Input.GetKey(KeyCode.N))
         {
             rightWizardControler.IsActive = true;
             leftWizardController.IsActive = false;
-            Camera.main.transform.parent = rightWizardControler.transform;
-            Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
+            CameraSingleton.Instance.WatchObject(rightWizardControler.gameObject);
         }
     }
 }

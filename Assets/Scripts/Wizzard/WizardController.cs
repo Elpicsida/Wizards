@@ -43,6 +43,7 @@ public class WizardController : MonoBehaviour
                     {
                         Spell spell = fireball.GetComponent<Spell>();
                         spell.Activate();
+                        CameraSingleton.Instance.WatchObject(spell.gameObject);
                         wizard.Spells.Remove(wizard.Spells[currentSpell]);
                     }
                 }
