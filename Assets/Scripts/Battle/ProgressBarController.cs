@@ -20,11 +20,11 @@ public class ProgressBarController : MonoBehaviour
     {
         if (isInitialized)
         {
-            StartCoroutine(AddingAnimation(initValue));
+            StartCoroutine(SetAnimation(initValue));
             return;
         }
 
-
+        this.currentValue = initValue;
         this.maxValue = initValue;
         isInitialized = true;
     }
@@ -41,13 +41,11 @@ public class ProgressBarController : MonoBehaviour
 
     IEnumerator SetAnimation(float i)
     {
-        float valueToAddOnTick = i / tick;
-        while (currentValue == i)
+        float valueToAddOnTick = (i - currentValue) / tick;
+        while (currentValue != i)
         {
-            currentValue += tick;
+            currentValue += valueToAddOnTick;
             gaugeImage.fillAmount = currentValue / maxValue;
-            if (currentValue >= maxValue)
-                currentValue = 0;
             yield return null;
         }
     }
