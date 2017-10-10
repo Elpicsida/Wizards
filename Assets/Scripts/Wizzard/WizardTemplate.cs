@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu]
 public class WizardTemplate : ScriptableObject
@@ -22,4 +23,6 @@ public class WizardTemplate : ScriptableObject
     public int Vision;
 
     public ElementEnum MainElement;
+
+    public List<SpellNames> Spells;
 }

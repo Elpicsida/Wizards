@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Assets.Scripts.Spells;
 using UnityEngine;
 
-public class WizzardController : MonoBehaviour
+public class WizardController : MonoBehaviour
 {
-    [HideInInspector]
-    public bool facingRight = true;
+    [HideInInspector] public bool facingRight = true;
+    [HideInInspector] public bool IsActive { get; set; }
+    [HideInInspector] public int Angle;
     public float moveForce = 30f;
     public float maxSpeed = 1f;
-    public GameObject FireballBallistic;
-    public GameObject FireballStraight;
-    public GameObject FireballTime;
-    [HideInInspector] public bool InputEnabled;
-    [HideInInspector] public int Angle;
-    private int FireStrength = 500;
-
+    public int FireStrength = 500;
+    
+    private int currentSpell;
     private Rigidbody2D rb2d;
+    public Wizard wizard;
 
     void Awake()
     {
@@ -23,47 +21,43 @@ public class WizzardController : MonoBehaviour
 
     void Activate()
     {
-        InputEnabled = true;
+        IsActive = true;
     }
 
     void Deactivate()
     {
-        InputEnabled = false;
+        IsActive = false;
     }
     
     void Update()
     {
-        if (InputEnabled)
+        if (IsActive)
         {
-            GameObject fireball = null;
             if (Input.GetKeyDown(KeyCode.F))
             {
-                fireball = (GameObject)Instantiate<GameObject>(FireballBallistic);
-            }
-            else if (Input.GetKeyDown(KeyCode.G))
-            {
-                fireball = (GameObject)Instantiate<GameObject>(FireballStraight);
-            }
-            else if (Input.GetKeyDown(KeyCode.H))
-            {
-                fireball = (GameObject)Instantiate<GameObject>(FireballTime);
-            }
+                if (wizard.Spells.Count > 0)
+                {
+                    GameObject fireball = SpellFactory.GetSpell(wizard.Spells[currentSpell]);
 
-            if (fireball != null)
-            {
-                var x = FireStrength * Mathf.Cos(Angle * Mathf.Deg2Rad);
-                var y = FireStrength * Mathf.Sin(Angle * Mathf.Deg2Rad);
-                int directionNum = facingRight ? 1 : -1;
-                fireball.transform.position = this.transform.position + new Vector3(directionNum * 0.4f, 0.4f, 0f);
-                var rigidBodyFireball = fireball.GetComponent<Rigidbody2D>();
-                rigidBodyFireball.AddForce(new Vector2(x, y));
+                    if (fireball != null)
+                    {
+                        Spell spell = fireball.GetComponent<Spell>();
+                        spell.Activate();
+                        CameraSingleton.Instance.WatchObject(spell.gameObject);
+                        wizard.Spells.Remove(wizard.Spells[currentSpell]);
+                    }
+                }
+                else
+                {
+                    Debug.Log("The wizard doesn't have any spells left");
+                }
             }
         }
     }
 
     void FixedUpdate()
     {
-        if (InputEnabled)
+        if (IsActive)
         {
             HandleCrosshair();
             HandleMovement();
@@ -75,11 +69,21 @@ public class WizzardController : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
 
         if (h == 0.0) rb2d.velocity = new Vector2();
-        if (h * rb2d.velocity.x < maxSpeed)
-            rb2d.AddForce(Vector2.right * h * moveForce);
+        if (wizard.Condition > 0)
+        {
 
-        if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
-            rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+            if (h * rb2d.velocity.x < maxSpeed)
+            {
+                rb2d.AddForce(Vector2.right * h * moveForce);
+            }
+            if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
+            {
+                wizard.Condition -= 1;
+                rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+                Debug.Log("Condition " + wizard.Condition);
+            }
+                
+        }
 
         if (h > 0 && !facingRight)
             Flip();

@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-
-    public Transform[] Wizzards;
-
     [SerializeField]
     WizardTemplate leftWizardTemplate;
     [SerializeField]
+    WizardController leftWizardController;
+    [SerializeField]
     Wizard leftWizard;
+
     [SerializeField]
     WizardTemplate rightWizardTemplate;
     [SerializeField]
     Wizard rightWizard;
+    [SerializeField]
+    WizardController rightWizardControler;
+
     [SerializeField]
     BattleGUIBuilder battleGUI;
 
@@ -22,14 +25,32 @@ public class TurnManager : MonoBehaviour
     {
         leftWizard.Init(leftWizardTemplate);
         rightWizard.Init(rightWizardTemplate);
-
     }
 
     void Start()
     {
-        Wizzards[0].gameObject.SendMessage("Activate");
-        Camera.main.transform.parent = Wizzards[0].transform;
-        battleGUI.BuildAllWizardGUI(rightWizard);
+        leftWizardController.IsActive = true;
+        battleGUI.BuildAllWizardGUI(leftWizard);
+        CameraSingleton.Instance.WatchObject(leftWizardController.gameObject);
+    }
+
+    public WizardController GetActiveWizard()
+    {
+        return leftWizardController.IsActive ? leftWizardController : rightWizardControler;
+    }
+
+    public void ChangeTurn()
+    {
+        if (leftWizardController.IsActive)
+        {
+            leftWizardController.IsActive = false;
+            rightWizardControler.IsActive = true;
+        }
+        else
+        {
+            leftWizardController.IsActive = true;
+            rightWizardControler.IsActive = false;
+        }
     }
 
     void Update()
@@ -37,18 +58,16 @@ public class TurnManager : MonoBehaviour
         if (Input.GetKey(KeyCode.M))
         {
             battleGUI.Test(rightWizard);
-            Wizzards[0].gameObject.SendMessage("Activate");
-            Wizzards[1].gameObject.SendMessage("Deactivate");
-            Camera.main.transform.parent = Wizzards[0].transform;
-            Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
+            leftWizardController.IsActive = true;
+            rightWizardControler.IsActive = false;
+            CameraSingleton.Instance.WatchObject(leftWizardController.gameObject);
         }
 
         if (Input.GetKey(KeyCode.N))
         {
-            Wizzards[1].gameObject.SendMessage("Activate");
-            Wizzards[0].gameObject.SendMessage("Deactivate");
-            Camera.main.transform.parent = Wizzards[1].transform;
-            Camera.main.transform.localPosition = new Vector3(0, 0, Camera.main.transform.localPosition.z);
+            rightWizardControler.IsActive = true;
+            leftWizardController.IsActive = false;
+            CameraSingleton.Instance.WatchObject(rightWizardControler.gameObject);
         }
     }
 }

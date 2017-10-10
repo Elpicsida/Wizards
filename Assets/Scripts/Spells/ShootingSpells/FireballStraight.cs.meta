@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: b43191d64cf09414c8a3b6c717c8600b
+timeCreated: 1506968387
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - Icon: {instanceID: 0}
+  - turnManager: {fileID: 114611336053116172, guid: da445272c64e11a40b02871b4a92c692,
+      type: 2}
+  - FireballBallistic: {fileID: 1387195562509858, guid: 9049738fa2d1f674a92d226a2c658b77,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
