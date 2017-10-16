@@ -13,9 +13,15 @@ public class BattleGUIBuilder : MonoBehaviour
     [SerializeField]
     Text healthPointsText;
     [SerializeField]
+    ProgressBarController healtPointBar;
+    [SerializeField]
     Text manaPointsText;
     [SerializeField]
+    ProgressBarController manaPointBar;
+    [SerializeField]
     Text conditionText;
+    [SerializeField]
+    ProgressBarController conditionBar;
     [SerializeField]
     Text vitalityText;
     [SerializeField]
@@ -73,14 +79,30 @@ public class BattleGUIBuilder : MonoBehaviour
     public void SetParameters(Wizard wizard)
     {
         battleGUIWIzardMainStats.healthPointsText.text = wizard.HealthPoints.ToString();
+        healtPointBar.Init(wizard.HealthPoints);
         battleGUIWIzardMainStats.manaPointsText.text = wizard.ManaPoints.ToString();
+        manaPointBar.Init(wizard.ManaPoints);
         battleGUIWIzardMainStats.conditionText.text = wizard.Condition.ToString();
+        manaPointBar.Init(wizard.Condition);
         battleGUIWIzardMainStats.vitalityText.text = wizard.Vitality.ToString();
         battleGUIWIzardMainStats.intelligenceText.text = wizard.Intelligence.ToString();
         battleGUIWIzardMainStats.resistanceText.text = wizard.Resistance.ToString();
         battleGUIWIzardMainStats.visionText.text = wizard.Vision.ToString();
     }
 
+    public void Test(Wizard wizard)
+    {
+        battleGUIWIzardMainStats.healthPointsText.text = wizard.HealthPoints.ToString();
+        healtPointBar.Init(1);
+        battleGUIWIzardMainStats.manaPointsText.text = wizard.ManaPoints.ToString();
+        manaPointBar.Init(1);
+        battleGUIWIzardMainStats.conditionText.text = wizard.Condition.ToString();
+        manaPointBar.Init(1);
+        battleGUIWIzardMainStats.vitalityText.text = wizard.Vitality.ToString();
+        battleGUIWIzardMainStats.intelligenceText.text = wizard.Intelligence.ToString();
+        battleGUIWIzardMainStats.resistanceText.text = wizard.Resistance.ToString();
+        battleGUIWIzardMainStats.visionText.text = wizard.Vision.ToString();
+    }
 }
 
 public struct BattleGUIWIzardMainStats

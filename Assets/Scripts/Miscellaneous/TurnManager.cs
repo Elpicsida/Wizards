@@ -55,6 +55,11 @@ public class TurnManager : MonoBehaviour
 
     void Update()
     {
+        if (leftWizardController.IsActive)
+            battleGUI.SetParameters(leftWizard);
+        else
+            battleGUI.SetParameters(rightWizard);
+
         if (Input.GetKey(KeyCode.M))
         {
             leftWizardController.IsActive = true;
