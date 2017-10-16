@@ -21,6 +21,8 @@ public class BattleGUIBuilder : MonoBehaviour
     [SerializeField]
     Text conditionText;
     [SerializeField]
+    ProgressBarController conditionBar;
+    [SerializeField]
     Text vitalityText;
     [SerializeField]
     Text intelligenceText;
@@ -81,6 +83,7 @@ public class BattleGUIBuilder : MonoBehaviour
         battleGUIWIzardMainStats.manaPointsText.text = wizard.ManaPoints.ToString();
         manaPointBar.Init(wizard.ManaPoints);
         battleGUIWIzardMainStats.conditionText.text = wizard.Condition.ToString();
+        manaPointBar.Init(wizard.Condition);
         battleGUIWIzardMainStats.vitalityText.text = wizard.Vitality.ToString();
         battleGUIWIzardMainStats.intelligenceText.text = wizard.Intelligence.ToString();
         battleGUIWIzardMainStats.resistanceText.text = wizard.Resistance.ToString();
@@ -94,6 +97,7 @@ public class BattleGUIBuilder : MonoBehaviour
         battleGUIWIzardMainStats.manaPointsText.text = wizard.ManaPoints.ToString();
         manaPointBar.Init(1);
         battleGUIWIzardMainStats.conditionText.text = wizard.Condition.ToString();
+        manaPointBar.Init(1);
         battleGUIWIzardMainStats.vitalityText.text = wizard.Vitality.ToString();
         battleGUIWIzardMainStats.intelligenceText.text = wizard.Intelligence.ToString();
         battleGUIWIzardMainStats.resistanceText.text = wizard.Resistance.ToString();
